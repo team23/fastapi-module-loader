@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "fastapi-modules"
+name = "fastapi-module-loader"
 version = "0.1.0"
 description = "FastAPI modules loading for better structure in your projects (like Django AppConfig)"
 authors = ["TEAM23 GmbH <info@team23.de>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">3.7"
+python = "^3.7"
 
 [tool.poetry.dev-dependencies]
 
