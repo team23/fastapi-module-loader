@@ -11,7 +11,7 @@ class Loader:
 
     def __init__(self, modules: List[str]) -> None:
         self.modules = {}
-        self.load(modules)
+        self._load(modules)
 
     @classmethod
     def _load_module(cls, module_import: str):  # noqa: ANN206
