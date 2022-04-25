@@ -37,7 +37,7 @@ stages:
 before_script:
   - python --version
   - pip install poetry
-  - poetry config settings.virtualenvs.in-project true
+  - poetry config virtualenvs.in-project true
   - poetry install
   - source `poetry env info --path`/bin/activate
 
