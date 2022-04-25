@@ -15,3 +15,6 @@ poetry.lock
 
 # PyCharm
 .idea/
+
+# VSCode
+.vscode
