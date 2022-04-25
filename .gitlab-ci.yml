@@ -95,8 +95,8 @@ documentation:
     - tags
 
 deploy-package-gitlab:
-  satge: deploy
-  onyl:
+  stage: deploy
+  only:
     - tag
   dependencies:
     - build_package
