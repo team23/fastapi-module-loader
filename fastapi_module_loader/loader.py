@@ -1,5 +1,6 @@
+from typing import Any, Callable, Dict, List
+
 import importlib
-from typing import Callable, Dict, List
 
 from .base import BaseModule
 
@@ -11,11 +12,11 @@ class Loader:
 
     def __init__(self, modules: List[str]) -> None:
         self.modules = {}
-        self.load(modules)
+        self._load(modules)
 
     @classmethod
-    def _load_module(cls, module_import: str):  # noqa: ANN206
-        package_import, module_name = module_import.rsplit('.', 1)
+    def _load_module(cls, module_import: str) -> Any:  # noqa: ANN206
+        package_import, module_name = module_import.rsplit(".", 1)
         package = importlib.import_module(package_import)
         return getattr(package, module_name)
 
@@ -30,7 +31,7 @@ class Loader:
 
     def setup(self) -> None:
         if not self.is_loaded:
-            raise RuntimeError('Modules must be loaded first')
+            raise RuntimeError("Modules must be loaded first")
 
         if self.is_setup:
             return
