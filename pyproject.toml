@@ -17,6 +17,10 @@ python = "^3.7"
 [tool.poetry.dev-dependencies]
 Sphinx = "^4.5.0"
 pytest = "^7.1.2"
+mypy = "^0.942"
+isort = "^5.10.1"
+pylint = "^2.13.7"
+safety = "^1.10.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
