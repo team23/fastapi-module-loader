@@ -40,7 +40,7 @@ isort:
   dependencies:
     - setup
   script:
-    - source`poetry env info --path`/bin/activate
+    - source .venv/bin/activate
     - poetry run isort --diff --check-only --settings-path pyproject.toml ./
 
 flake8:
@@ -48,7 +48,7 @@ flake8:
   dependencies:
     - setup
   script:
-    - source`poetry env info --path`/bin/activate
+    - source .venv/bin/activate
     - poetry run mypy --config-file pyproject.toml ./
 
 pylint:
@@ -56,7 +56,7 @@ pylint:
   dependencies:
     - setup
   script:
-    - source`poetry env info --path`/bin/activate
+    - source .venv/bin/activate
     - pylint .
 
 safety:
@@ -64,7 +64,7 @@ safety:
   dependencies:
     - setup
   script:
-    - source`poetry env info --path`/bin/activate
+    - source .venv/bin/activate
     - poetry check
     - poetry run safety check --full-report
     #- poetry run bandit -ll --recursive fastapi_module_loader tests
@@ -74,7 +74,7 @@ pytest:
   dependencies:
     - setup
   script:
-    - source`poetry env info --path`/bin/activate
+    - source .venv/bin/activate
     - pytest --junitxml=report.xml --cov=fastapi_module_loader tests/
   artifacts:
     when: always
@@ -84,7 +84,7 @@ pytest:
 build_package:
   stage: build
   script:
-    - source`poetry env info --path`/bin/activate
+    - source .venv/bin/activate
     - poetry build
   artifacts:
     paths:
@@ -96,7 +96,7 @@ documentation:
   dependencies:
     - setup
   script:
-    - source`poetry env info --path`/bin/activate
+    - source .venv/bin/activate
     - pip install sphinx sphinx-rtd-theme
     - cd doc
     - make html
@@ -114,7 +114,7 @@ deploy-package-gitlab:
   dependencies:
     - build_package
   script:
-    - source`poetry env info --path`/bin/activate
+    - source .venv/bin/activate
     - poetry config repositories.gitlab "https://git.team23.de/api/v4/projects/$CI_PROJECT_ID/packages/pypi"
     - poetry config http-basic.gitlab gitlab-ci-token "$CI_JOB_TOKEN"
     - poetry publish --repository gitlab
