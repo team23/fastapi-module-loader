@@ -14,7 +14,6 @@ repository = "https://github.com/team23/fastapi-module-loading"
 python = "^3.7"
 fastapi = "^0"
 
-
 [tool.poetry.dev-dependencies]
 Sphinx = "^4.5.0"
 pytest = "^7.1.2"
@@ -26,3 +25,27 @@ safety = "^1.10.3"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+line_length = 115  # (2 + 3) * 23
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+filterwarnings = [
+    "ignore:.*U.*mode is deprecated:DeprecationWarning",
+]
+norecursedirs = [
+    ".git",
+    "__pycache__",
+]
+python_files = [
+    "tests.py",
+    "test_*.py",
+    "*_tests.py",
+]
+python_functions = [
+    "test_*"
+]
+
