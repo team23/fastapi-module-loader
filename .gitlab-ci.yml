@@ -41,7 +41,8 @@ setup:
     - poetry config virtualenvs.in-project true
     - poetry install
   artifacts:
-    path: .venv
+    paths: 
+      - .venv
 
 isort:
   <<: *python_env
