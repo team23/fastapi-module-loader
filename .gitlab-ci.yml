@@ -82,7 +82,7 @@ pytest:
   <<: *python_env
   stage: tests
   script:
-    - pytest --junitxml=report.xml --cov=fastapi_module_loader tests/
+    - poetry run pytest --junitxml=report.xml --cov=fastapi_module_loader tests/
   artifacts:
     when: always
     reports:
