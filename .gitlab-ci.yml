@@ -56,12 +56,13 @@ flake8:
   script:
     - poetry run mypy --config-file pyproject.toml ./
 
-pylint:
-  <<: *python_env
-  stage: quality
-  
-  script:
-    - pylint .
+# disabled until documentation (docstrings) is done
+#pylint:
+#  <<: *python_env
+#  stage: quality
+#  
+#  script:
+#    - pylint fastapi_module_loader
 
 safety:
   <<: *python_env

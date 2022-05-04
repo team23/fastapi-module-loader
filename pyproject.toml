@@ -29,7 +29,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.isort]
 multi_line_output = 3
 include_trailing_comma = true
-line_length = 115  # (2 + 3) * 23
+line_length = 140
 
 [tool.pytest.ini_options]
 minversion = "7.0"
