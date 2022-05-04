@@ -16,6 +16,7 @@ fastapi = "^0"
 
 [tool.poetry.dev-dependencies]
 Sphinx = "^4.5.0"
+flake8 = "^3"
 pytest = "^7.1.2"
 mypy = "^0.942"
 isort = "^5.10.1"

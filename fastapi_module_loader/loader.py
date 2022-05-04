@@ -1,5 +1,5 @@
 import importlib
-from typing import Callable, Dict, List
+from typing import Dict, List
 
 from .base import BaseModule
 

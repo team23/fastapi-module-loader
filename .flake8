@@ -34,4 +34,4 @@ per-file-ignores =
     test_*.py: E501,ANN,F811
     conftest.py: E501,ANN,F811
 max-complexity = 5
-max-line-length = 115  # (2 + 3) * 23
+max-line-length = 140
