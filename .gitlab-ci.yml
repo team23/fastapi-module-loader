@@ -50,11 +50,17 @@ isort:
   script:
     - poetry run isort --diff --check-only --settings-path pyproject.toml ./
 
+mypy:
+  <<: *python_env
+  stage: quality
+  script:
+    - poetry run mypy --config-file pyproject.toml ./fastapi_module_loader
+
 flake8:
   <<: *python_env
   stage: quality
   script:
-    - poetry run mypy --config-file pyproject.toml ./
+    - poetry run flake8 ./fastapi_module_loader --statistics --count
 
 # disabled until documentation (docstrings) is done
 #pylint:

@@ -49,5 +49,5 @@ python_functions = [
     "test_*"
 ]
 
-[mypy]
-exclude = ['doc/']
+[tool.mypy]
+exclude = ['doc']
