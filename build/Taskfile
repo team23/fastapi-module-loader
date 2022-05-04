@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# b5 Taskfile, see https://git.team23.de/build/b5 for details
+
+# Basic housekeeping tasks
+
+task:install() {
+    true
+}
+
+task:update() {
+    true
+}
+
+# Running utils
+
+task:poetry () {
+    cd .. && \
+    poetry "$@"
+}
+
+# Code cleanup & quality
+
+task:lint() {
+    task:poetry run flake8
+}
+
+task:isort() {
+    task:poetry run isort .
+}
+
+task:safety() {
+    task:poetry run safety check
+}
+
+task:check() {
+    task:lint && \
+    task:safety
+}
