@@ -82,7 +82,7 @@ pytest:
   <<: *python_env
   stage: tests
   script:
-    - poetry run pytest --junitxml=report.xml --cov=fastapi_module_loader tests/
+    - poetry run pytest --junitxml=report.xml --cov-report --cov=fastapi_module_loader tests/
   artifacts:
     when: always
     reports:
@@ -116,7 +116,7 @@ deploy-package-gitlab:
   <<: *python_env
   stage: deploy
   only:
-    - tag
+    - tags
   dependencies:
     - build_package
   script:
