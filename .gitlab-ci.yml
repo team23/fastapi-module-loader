@@ -1,4 +1,5 @@
-image: python:latest
+# image must contain poetry
+image: docker.team23.de/team23/python/poetry-docker
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -20,6 +21,12 @@ cache:
     - .venv
     - .cache/pip
 
+.job_template: &python_env
+  dependencies:
+    - setup
+  script:
+    - source .venv/bin/activate
+
 stages:
   - prepare_python_env
   - quality
@@ -31,50 +38,42 @@ setup:
   stage: prepare_python_env
   script:
     - python --version
-    - pip install poetry
     - poetry config virtualenvs.in-project true
     - poetry install
+  artifacts:
+    path: .venv
 
 isort:
+  <<: *python_env
   stage: quality
-  dependencies:
-    - setup
   script:
-    - source .venv/bin/activate
     - poetry run isort --diff --check-only --settings-path pyproject.toml ./
 
 flake8:
+  <<: *python_env
   stage: quality
-  dependencies:
-    - setup
   script:
-    - source .venv/bin/activate
     - poetry run mypy --config-file pyproject.toml ./
 
 pylint:
+  <<: *python_env
   stage: quality
-  dependencies:
-    - setup
+  
   script:
-    - source .venv/bin/activate
     - pylint .
 
 safety:
+  <<: *python_env
   stage: quality
-  dependencies:
-    - setup
   script:
-    - source .venv/bin/activate
     - poetry check
     - poetry run safety check --full-report
     #- poetry run bandit -ll --recursive fastapi_module_loader tests
 
 pytest:
+  <<: *python_env
   stage: tests
-  dependencies:
-    - setup
   script:
-    - source .venv/bin/activate
     - pytest --junitxml=report.xml --cov=fastapi_module_loader tests/
   artifacts:
     when: always
@@ -82,9 +81,9 @@ pytest:
       junit: report.xml
 
 build_package:
+  <<: *python_env
   stage: build
   script:
-    - source .venv/bin/activate
     - poetry build
   artifacts:
     paths:
@@ -92,11 +91,9 @@ build_package:
     expire_in: 1 week
 
 documentation:
+  <<: *python_env
   stage: deploy
-  dependencies:
-    - setup
   script:
-    - source .venv/bin/activate
     - pip install sphinx sphinx-rtd-theme
     - cd doc
     - make html
@@ -108,13 +105,13 @@ documentation:
     - tags
 
 deploy-package-gitlab:
+  <<: *python_env
   stage: deploy
   only:
     - tag
   dependencies:
     - build_package
   script:
-    - source .venv/bin/activate
     - poetry config repositories.gitlab "https://git.team23.de/api/v4/projects/$CI_PROJECT_ID/packages/pypi"
     - poetry config http-basic.gitlab gitlab-ci-token "$CI_JOB_TOKEN"
     - poetry publish --repository gitlab
