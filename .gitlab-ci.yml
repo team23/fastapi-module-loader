@@ -102,10 +102,7 @@ documentation:
   <<: *python_env
   stage: deploy
   script:
-    - pip install sphinx sphinx-rtd-theme
-    - cd doc
-    - make html
-    - mv _build/html/ ../public/
+    - poetry run sphinx-build -b html doc public/
   artifacts:
     paths:
       - public
