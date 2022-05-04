@@ -19,3 +19,7 @@ poetry.lock
 
 # VSCode
 .vscode
+
+#pytest reports
+report.xml
+.coverage

@@ -1,5 +1,5 @@
 import pytest
 
 
-def test_load(module_name):
+def test_should_pass():
     assert True == True

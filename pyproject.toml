@@ -22,6 +22,7 @@ mypy = "^0.942"
 isort = "^5.10.1"
 pylint = "^2.13.7"
 safety = "^1.10.3"
+pytest-cov = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
