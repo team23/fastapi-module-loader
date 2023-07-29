@@ -53,7 +53,9 @@ class ModuleLoader:
             if module is not None:
                 continue
 
-            self.modules[module_import] = self._load_module(module_import)(self)
+            module = self._load_module(module_import)(self)
+            self.modules[module_import] = module
+            module.load()
 
         self.is_loaded = True
 

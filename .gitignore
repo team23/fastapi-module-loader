@@ -1,21 +1,8 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+/poetry.lock
+/dist/*
+/.coverage
+/.tox
 
-# Distribution / packaging
-*.egg-info/
-*.egg
-/dist/
-
-# poetry
-poetry.lock
-
-# Environments
-.venv
-
-# PyCharm
-.idea/
-
-# VSCode
-.vscode
+__pycache__
+*.pyc
+*.pyo

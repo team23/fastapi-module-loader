@@ -20,8 +20,30 @@ class SubmoduleLoadingModule(BaseModule):
         self.load_in_module("sadly_does_not_exist")
 
 
+class TrackingModule(BaseModule):
+    is_load: bool = False
+    is_pre_setup: bool = False
+    is_setup: bool = False
+    is_post_setup: bool = False
+
+    def load(self) -> None:
+        self.is_load = True
+
+    def pre_setup(self) -> None:
+        self.is_pre_setup = True
+
+    def setup(self) -> None:
+        self.is_setup = True
+
+    def post_setup(self) -> None:
+        self.is_post_setup = True
+
+
 TEST_MODULES = [
     "tests.test_module_loader.WorkingModule",
+]
+TEST_TRACKING_MODULES = [
+    "tests.test_module_loader.TrackingModule",
 ]
 TEST_RAISING_MODULES = [
     "tests.test_module_loader.ExceptionRaisingModule",
@@ -92,3 +114,22 @@ def test_module_loader_calls_module_config_setup() -> None:
     loader.load()
     with pytest.raises(ValueError):
         loader.setup()
+
+
+def test_module_loader_will_call_all_setup_methods() -> None:
+    loader = ModuleLoader(TEST_TRACKING_MODULES)
+    loader.load()
+
+    tracking_module = loader.loaded_modules[0]
+
+    assert tracking_module.is_load is True
+    assert tracking_module.is_pre_setup is False
+    assert tracking_module.is_setup is False
+    assert tracking_module.is_post_setup is False
+
+    loader.setup()
+
+    assert tracking_module.is_load is True
+    assert tracking_module.is_pre_setup is True
+    assert tracking_module.is_setup is True
+    assert tracking_module.is_post_setup is True

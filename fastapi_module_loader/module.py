@@ -29,14 +29,19 @@ class BaseModule:
     def __init__(self, loader: "ModuleLoader") -> None:
         self.loader = loader
 
+    def load_in_module(self, module_path: str) -> None:
+        """Will import a module under the current module."""
+
+        importlib.import_module(f"{self.__class__.__module__}.{module_path}")
+
+    def load(self) -> None:
+        """Hook is executed on ModuleLoader.load()."""
+
     def pre_setup(self) -> None:
-        pass
+        """Hook is executed on ModuleLoader.setup(). Runs before BaseModule.setup()."""
 
     def setup(self) -> None:
-        pass
+        """Hook is executed on ModuleLoader.setup()."""
 
     def post_setup(self) -> None:
-        pass
-
-    def load_in_module(self, file: str) -> None:
-        importlib.import_module(f"{self.__class__.__module__}.{file}")
+        """Hook is executed on ModuleLoader.setup(). Runs after BaseModule.setup()."""
