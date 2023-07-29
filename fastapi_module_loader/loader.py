@@ -55,7 +55,15 @@ class ModuleLoader:
 
             module = self._load_module(module_import)(self)
             self.modules[module_import] = module
-            module.load()
+
+            try:
+                # Call the load() hook
+                module.load()
+            except Exception as O_o:
+                raise ImproperlyConfiguredModules(
+                    f'Could not load "{module_import}", as the load() hook did raise '
+                    f'an exception: {O_o}',
+                ) from O_o
 
         self.is_loaded = True
 
@@ -77,10 +85,15 @@ class ModuleLoader:
         if self.is_setup:
             return
 
+        # Call the pre_setup() hook
         for module in self.loaded_modules:
             module.pre_setup()
+
+        # Call the setup() hook
         for module in self.loaded_modules:
             module.setup()
+
+        # Call the post_setup() hook
         for module in self.loaded_modules:
             module.post_setup()
 
