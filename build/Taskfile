@@ -1,38 +1,60 @@
 #!/usr/bin/env bash
 # b5 Taskfile, see https://git.team23.de/build/b5 for details
 
-# Basic housekeeping tasks
+pre-commit:install() {
+    if ( which pre-commit > /dev/null 2>&1 )
+    then
+        pre-commit install --install-hooks
+    else
+        b5:warn "-----------------------------------------------------------------"
+        b5:warn "pre-commit is not installed - cannot enable pre-commit hooks!"
+        b5:warn "Recommendation: Install pre-commit ('brew install pre-commit')."
+        b5:warn "-----------------------------------------------------------------"
+    fi
+}
 
 task:install() {
-    true
+    task:poetry install
+
+    pre-commit:install
 }
 
 task:update() {
-    true
+    task:poetry install
 }
 
-# Running utils
-
-task:poetry () {
-    cd .. && \
-    poetry "$@"
+task:poetry() {
+    (
+        cd .. && \
+        poetry "$@"
+    )
 }
 
-# Code cleanup & quality
+task:test() {
+    task:poetry run pytest --cov=fastapi_module_loader --cov-report term-missing:skip-covered "$@"
+}
 
-task:lint() {
-    task:poetry run flake8
+task:test:all() {
+    task:poetry run tox
 }
 
 task:isort() {
-    task:poetry run isort .
+    task:poetry run isort fastapi_module_loader tests
 }
 
-task:safety() {
-    task:poetry run safety check
+task:flake8() {
+    task:poetry run flake8 fastapi_module_loader tests
 }
 
-task:check() {
-    task:lint && \
-    task:safety
+task:mypy() {
+    task:poetry run mypy fastapi_module_loader
+}
+
+task:lint() {
+    task:flake8
+    task:mypy
+}
+
+task:publish() {
+    task:poetry publish --build
 }

@@ -8,22 +8,14 @@ exclude =
     __pycache__,
 # * A001 variable is shadowing a python builtin -> we need to have "id", "filter", ...
 # * A002 argument is shadowing a python builtin -> we need to have "id", "filter", ...
-# * A003 class attribute is shadowing a python builtin -> we need to have "id", "filter", ...
 # * ANN101 Missing type annotation for self in method
 # * ANN102 Missing type annotation for cls in class method
-# * B305 `.next()` -> false positive: https://github.com/PyCQA/flake8-bugbear/issues/59
-# * C901 mccabe code complexity check -> postponed
-# * E704 multiple statements on one line (def)
-# * N8** naming conventions (pep8) -> postponed
+# * ANN401 Disallow typing.Any -> We want to use this
 # * W503 line break before binary operator
 # * B008 function calls for default values - this is used heavily by pydantic/fastapi
-# * F405 ... may be undefined or from star import -> We use star imports
-# * F821 undefined name ... -> Seems to be broken (for type annotations which use function calls as types)
-ignore = A001,A002,A003,ANN101,ANN102,B305,C901,E704,N8,W503,B008,F405,F821
+ignore = A001,A002,A003,ANN101,ANN102,ANN401,B305,C901,E704,N8,W503,B008,F405,F821
 
-# * commands allow print statements (T001)
-# * sync_iam.py is skipped for annotations so far (ANN)
-# * No annotations in migrations required (ANN)
+# * commands allow print statements (T201)
 # * Allow undefined names in migrations (F821)
 # * Allow unused imports in __init__.py (F401)
 # * No annotations in tests and fixtures required (ANN)
@@ -31,7 +23,7 @@ ignore = A001,A002,A003,ANN101,ANN102,B305,C901,E704,N8,W503,B008,F405,F821
 per-file-ignores =
     __init__.py: F401
     *_fixture.py: E501,ANN,F811
-    test_*.py: E501,ANN,F811
+    test_*.py: E501,ANN,F811,F401
     conftest.py: E501,ANN,F811
 max-complexity = 5
-max-line-length = 115  # (2 + 3) * 23
+max-line-length = 115
