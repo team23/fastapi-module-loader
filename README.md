@@ -8,6 +8,78 @@ some hooks or just load all SQLAlchemy ORM models so relationships work.
 The module loader idea is based on what Django does using `AppConfig`'s - so if you know those you might find this
 pretty straight forward.
 
+# Example FastAPI setup
+
+Lets say we are using the following folder structure in your project, `modules` may contain a list of modules
+used by your application:
+
+```text
+yourapp
+|-- modules
+|   `-- something
+|       `-- __init__.py     <- SomethingModule is defined here, see technical details below
+|-- config.py               <- Your config file
+|-- loader.py               <- This is where you put the global loader instance
+`-- main.py                 <- Your normal FastAPI application lives here
+```
+
+Now lets put the MODULES list into `config.py`:
+
+```python
+MODULES = [
+    "yourapp.modules.something.SomethingModules",
+]
+```
+
+Then add the loader to your `loader.py`:
+
+```python
+from fastapi_module_loader import ModuleLoader
+
+from yourapp.config import MODULES
+
+
+loader = ModuleLoader(MODULES)
+```
+
+**Note:** We are **NOT** calling `loader.load()` or `loader.setup()` here. This is because we want to do this in our
+`main.py` file so we have control when this actually happens.
+
+Then change your `main.py` to look like this:
+
+```python
+from fastapi import FastAPI
+
+from yourapp.loader import loader
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    loader.setup()  # Setup everythign on FastAPI startup
+    yield
+
+
+loader.load()  # Ensure everything is loaded
+app = FastAPI(lifespan=lifespan)
+
+# ...put the actual FastAPI code here
+```
+
+# Use cases
+
+Those are some use cases we encountered while working on projects. Those use cases led us to create this library:
+
+* `main.py`: Load the modules to ensure everything is setup for the FastAPI app.
+* In alembic migrations `env.py`: Ensure all `orm.py` are loaded and the alembic migrations can "see" all the ORM
+  models. Otherwise, detecting any changes would not be possible at all.  
+  (see https://alembic.sqlalchemy.org/en/latest/tutorial.html#the-migration-environment)
+* To register any hooks bound to `async-signals` Signal instances.  
+  (see https://github.com/team23/async-signals)
+* There will be many additional use cases for using the module loader. If you have any interesting use case please
+  open an issue and tell us about it. 😉
+
+# Technical details
+
 ## Basic structure
 
 The class `ModuleLoader` is the main entry point for the module loader system. It needs to be instantiated with a
@@ -139,19 +211,6 @@ loading those, this includes:
 Note however that all exceptions raised by the `setup()` method of the modules will just be passed through. The module
 loader will not catch now handle them. This is also the case if a modules to be loaded by `Self.load_in_module()`
 does not exist. Generally you have to handle those errors in `setup()` yourself.
-
-# Use cases
-
-Those are some use cases we encountered while working on projects. Those use cases led us to create this library:
-
-* `main.py`: Load the modules to ensure everything is setup for the FastAPI app.
-* In alembic migrations `env.py`: Ensure all `orm.py` are loaded and the alembic migrations can "see" all the ORM
-  models. Otherwise, detecting any changes would not be possible at all.  
-  (see https://alembic.sqlalchemy.org/en/latest/tutorial.html#the-migration-environment)
-* To register any hooks bound to `async-signals` Signal instances.  
-  (see https://github.com/team23/async-signals)
-* There will be many additional use cases for using the module loader. If you have any interesting use case please
-  open an issue and tell us about it. 😉
 
 # Contributing
 
