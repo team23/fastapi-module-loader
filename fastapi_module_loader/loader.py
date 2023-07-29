@@ -1,6 +1,5 @@
-from typing import Dict, List
-
 import importlib
+from typing import Dict, List, Optional
 
 from fastapi_module_loader.exceptions import ImproperlyConfiguredModules
 from fastapi_module_loader.module import BaseModule
@@ -11,7 +10,7 @@ class ModuleLoader:
     Loads `ModuleConfig` instances.
     """
 
-    modules: Dict[str, BaseModule]
+    modules: Dict[str, Optional[BaseModule]]
     is_loaded: bool = False
     is_setup: bool = False
 
@@ -58,6 +57,15 @@ class ModuleLoader:
 
         self.is_loaded = True
 
+    @property
+    def loaded_modules(self) -> List[BaseModule]:
+        return [
+            module
+            for module
+            in self.modules.values()
+            if module is not None
+        ]
+
     def setup(self) -> None:
         if not self.is_loaded:
             raise ImproperlyConfiguredModules(
@@ -67,7 +75,11 @@ class ModuleLoader:
         if self.is_setup:
             return
 
-        for module in self.modules.values():
+        for module in self.loaded_modules:
+            module.pre_setup()
+        for module in self.loaded_modules:
             module.setup()
+        for module in self.loaded_modules:
+            module.post_setup()
 
         self.is_setup = True
