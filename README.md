@@ -55,7 +55,7 @@ from yourapp.loader import loader
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    loader.setup()  # Setup everythign on FastAPI startup
+    loader.setup()  # Setup everything on FastAPI startup
     yield
 
 
