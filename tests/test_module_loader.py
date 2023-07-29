@@ -21,13 +21,13 @@ class SubmoduleLoadingModule(BaseModule):
 
 
 TEST_MODULES = [
-    "fastapi_module_loader.tests.test_module_loader.WorkingModule",
+    "tests.test_module_loader.WorkingModule",
 ]
 TEST_RAISING_MODULES = [
-    "fastapi_module_loader.tests.test_module_loader.ExceptionRaisingModule",
+    "tests.test_module_loader.ExceptionRaisingModule",
 ]
 TEST_LOADING_MODULES = [
-    "fastapi_module_loader.tests.test_module_loader.SubmoduleLoadingModule",
+    "tests.test_module_loader.SubmoduleLoadingModule",
 ]
 
 
@@ -54,7 +54,7 @@ def test_module_loader_will_fail_on_missing_module_paths() -> None:
 
 
 def test_module_loader_will_fail_on_missing_module_in_import() -> None:
-    loader = ModuleLoader(["fastapi_module_loader.tests.test_module_loader.DoesNotExist"])
+    loader = ModuleLoader(["tests.test_module_loader.DoesNotExist"])
     with pytest.raises(ImproperlyConfiguredModules):
         loader.load()
 
@@ -62,8 +62,8 @@ def test_module_loader_will_fail_on_missing_module_in_import() -> None:
 def test_module_loader_will_ensure_module_type() -> None:
     loader = ModuleLoader(
         [
-            "fastapi_module_loader.tests.test_module_loader."
-            "test_module_loader_will_ensure_module_type",  # use this test function
+            # use this test function, which is not a BaseModules
+            "tests.test_module_loader.test_module_loader_will_ensure_module_type",
         ],
     )
     with pytest.raises(ImproperlyConfiguredModules):
@@ -76,7 +76,7 @@ def test_module_will_be_able_to_import_submodules() -> None:
     with mock.patch("importlib.import_module") as import_module_mock:
         loader.setup()
     import_module_mock.assert_called_once_with(
-        "fastapi_module_loader.tests.test_module_loader.sadly_does_not_exist",
+        "tests.test_module_loader.sadly_does_not_exist",
     )
 
 
