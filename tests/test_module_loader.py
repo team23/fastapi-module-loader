@@ -10,6 +10,11 @@ class WorkingModule(BaseModule):
     pass
 
 
+class UnloadableModule(BaseModule):
+    def load(self) -> None:
+        raise ValueError
+
+
 class ExceptionRaisingModule(BaseModule):
     def setup(self) -> None:
         raise ValueError
@@ -44,6 +49,9 @@ TEST_MODULES = [
 ]
 TEST_TRACKING_MODULES = [
     "tests.test_module_loader.TrackingModule",
+]
+TEST_UNLOADABLE_MODULES = [
+    "tests.test_module_loader.UnloadableModule",
 ]
 TEST_RAISING_MODULES = [
     "tests.test_module_loader.ExceptionRaisingModule",
@@ -107,6 +115,12 @@ def test_module_loader_allows_multiple_setup_calls() -> None:
     loader.load()
     loader.setup()
     loader.setup()
+
+
+def test_module_loader_will_handle_exceptions_on_load() -> None:
+    loader = ModuleLoader(TEST_UNLOADABLE_MODULES)
+    with pytest.raises(ImproperlyConfiguredModules):
+        loader.load()
 
 
 def test_module_loader_calls_module_config_setup() -> None:
