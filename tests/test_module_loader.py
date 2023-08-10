@@ -12,12 +12,12 @@ class WorkingModule(BaseModule):
 
 class UnloadableModule(BaseModule):
     def load(self) -> None:
-        raise ValueError
+        raise ValueError("ABORT")
 
 
 class ExceptionRaisingModule(BaseModule):
     def setup(self) -> None:
-        raise ValueError
+        raise ValueError("ABORT")
 
 
 class SubmoduleLoadingModule(BaseModule):
@@ -119,6 +119,7 @@ def test_module_loader_allows_multiple_setup_calls() -> None:
 
 def test_module_loader_will_handle_exceptions_on_load() -> None:
     loader = ModuleLoader(TEST_UNLOADABLE_MODULES)
+    # ValueError will be converted to ImproperlyConfiguredModules
     with pytest.raises(ImproperlyConfiguredModules):
         loader.load()
 
@@ -126,7 +127,8 @@ def test_module_loader_will_handle_exceptions_on_load() -> None:
 def test_module_loader_calls_module_config_setup() -> None:
     loader = ModuleLoader(TEST_RAISING_MODULES)
     loader.load()
-    with pytest.raises(ValueError):
+    # ValueError will just be passed through
+    with pytest.raises(ValueError, match="ABORT"):
         loader.setup()
 
 

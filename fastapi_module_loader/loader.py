@@ -26,17 +26,17 @@ class ModuleLoader:
         package_import, module_name = module_import.rsplit('.', 1)
         try:
             package = importlib.import_module(package_import)
-        except ImportError:
+        except ImportError as O_o:
             raise ImproperlyConfiguredModules(
                 f'Could not import "{package_import}"',
-            )
+            ) from O_o
 
         try:
             module_class = getattr(package, module_name)
-        except AttributeError:
+        except AttributeError as O_o:
             raise ImproperlyConfiguredModules(
                 f'Could not find "{module_name}" in "{package_import}"',
-            )
+            ) from O_o
 
         if (
             not isinstance(module_class, type)
