@@ -32,7 +32,7 @@ test-all: (poetry "run" "tox")
 
 ruff *args: (poetry "run" "ruff" "check" "fastapi_module_loader" "tests" args)
 
-mypy *args:  (poetry "run" "mypy" "fastapi_module_loader" args)
+mypy *args: (poetry "run" "mypy" "fastapi_module_loader" args)
 
 lint: ruff mypy
 
