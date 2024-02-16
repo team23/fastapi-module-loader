@@ -32,8 +32,8 @@ test-all: (poetry "run" "tox")
 
 ruff *args: (poetry "run" "ruff" "check" "fastapi_module_loader" "tests" args)
 
-mypy *args: (poetry "run" "mypy" "fastapi_module_loader" args)
+pyright *args: (poetry "run" "pyright" "fastapi_module_loader" args)
 
-lint: ruff mypy
+lint: ruff pyright
 
 publish: (poetry "publish" "--build")
