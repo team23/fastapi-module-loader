@@ -1,2 +1,2 @@
-from fastapi_module_loader.loader import ModuleLoader
-from fastapi_module_loader.module import BaseModule
+from fastapi_module_loader.loader import ModuleLoader as ModuleLoader
+from fastapi_module_loader.module import BaseModule as BaseModule
