@@ -15,11 +15,7 @@ class ModuleLoader:
     is_setup: bool = False
 
     def __init__(self, modules: list[str]) -> None:
-        self.modules = {
-            module: None
-            for module
-            in modules
-        }
+        self.modules = dict.fromkeys(modules)
 
     @classmethod
     def _load_module(cls, module_import: str):  # noqa: ANN206
