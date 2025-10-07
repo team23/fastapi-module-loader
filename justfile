@@ -19,28 +19,26 @@ _install-pre-commit:
     #!powershell.exe
     Write-Host "Please ensure pre-commit hooks are installed using 'pre-commit install --install-hooks'"
 
-install: (poetry "install") && _install-pre-commit
+install: (uv "sync" "--group" "dev") && _install-pre-commit
 
-update: (poetry "install")
+update: (uv "sync" "--group" "dev")
 
-poetry *args:
-    poetry {{args}}
+uv *args:
+    uv {{args}}
 
-test *args: (poetry "run" "pytest" "--cov=fastapi_module_loader" "--cov-report" "term-missing:skip-covered" args)
+test *args: (uv "run" "pytest" "--cov=fastapi_module_loader" "--cov-report" "term-missing:skip-covered" args)
 
-test-all: (poetry "run" "tox")
+test-all: (uv "run" "tox")
 
-ruff *args: (poetry "run" "ruff" "check" "fastapi_module_loader" "tests" args)
+ruff *args: (uv "run" "ruff" "check" "fastapi_module_loader" "tests" args)
 
-pyright *args: (poetry "run" "pyright" "fastapi_module_loader" args)
+pyright *args: (uv "run" "pyright" "fastapi_module_loader" args)
 
 lint: ruff pyright
 
-publish: (poetry "publish" "--build")
-
-release version: (poetry "version" version)
+release version: (uv "version" version)
     git add pyproject.toml
-    git commit -m "release: 🔖 v$(poetry version --short)" --no-verify
-    git tag "v$(poetry version --short)"
+    git commit -m "release: 🔖 v$(uv version --short)" --no-verify
+    git tag "v$(uv version --short)"
     git push
     git push --tags

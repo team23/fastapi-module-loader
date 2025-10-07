@@ -1,27 +1,31 @@
-[tool.poetry]
+[project]
 name = "fastapi-module-loader"
 version = "0.3.0"
 description = "FastAPI modules loading for better structure in your projects (like Django AppConfig)"
-authors = ["TEAM23 GmbH <info@team23.de>"]
+authors = [{ name = "TEAM23 GmbH", email = "info@team23.de" }]
 license = "MIT"
-repository = "https://github.com/team23/fastapi-module-loading"
 readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.100.0,<1.0.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-fastapi = ">=0.65.2,<1.0.0"
+[project.urls]
+Repository = "https://github.com/team23/fastapi-module-loading"
 
-[tool.poetry.group.dev.dependencies]
-pytest = ">=7.1.2,<9.0.0"
-pytest-cov = ">=3,<8"
-tox = ">=3.26,<5.0"
-httpx = ">=0.24.1,<1.0.0"
-ruff = ">=0.5.0,<0.14.0"
-pyright = ">=1.1.350,<1.2"
+[dependency-groups]
+dev = [
+    "pytest>=7.1.2,<9.0.0",
+    "pytest-cov>=3,<8",
+    "tox>=3.26,<5.0",
+    "httpx>=0.24.1,<1.0.0",
+    "ruff>=0.5.0,<0.14.0",
+    "pyright>=1.1.350,<1.2",
+]
 
 [tool.ruff]
 line-length = 115
-target-version = "py39"
+target-version = "py310"
 output-format = "grouped"
 
 [tool.ruff.lint]
@@ -34,5 +38,9 @@ ignore = ["A001","A002","A003","ANN401","C901","N8","B008","F405","F821"]
 "test_*.py" = ["S101","ANN","F401","ARG001"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.8.22,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "fastapi_module_loader"
+module-root = ""
