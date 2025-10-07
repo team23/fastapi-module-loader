@@ -1,5 +1,4 @@
 import importlib
-from typing import Optional
 
 from fastapi_module_loader.exceptions import ImproperlyConfiguredModules
 from fastapi_module_loader.module import BaseModule
@@ -10,7 +9,7 @@ class ModuleLoader:
     Loads `ModuleConfig` instances.
     """
 
-    modules: dict[str, Optional[BaseModule]]
+    modules: dict[str, BaseModule | None]
     is_loaded: bool = False
     is_setup: bool = False
 
